@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Blog</h1>
+{% for post in posts %}
+<article class="post">
+    <h2>{{ post.title }}</h2>
+    <p class="post-date">{{ post.date }}</p>
+    <div class="post-content">{{ post.content | safe }}</div>
+</article>
+{% else %}
+<p>No blog posts found.</p>
+{% endfor %}
+{% endblock %}
