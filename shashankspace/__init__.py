@@ -1,5 +1,6 @@
 from flask import Flask
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object("shashankspace.config.Config")
@@ -17,4 +18,12 @@ def create_app():
     app.register_blueprint(resume_bp)
     app.register_blueprint(contact_bp)
 
+    # --- Jinja globals (for footer year, active nav, etc.) ---
+    @app.context_processor
+    def inject_globals():
+        import datetime
+        return {"current_year": datetime.datetime.now().year}
+
     return app
+
+

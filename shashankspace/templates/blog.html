@@ -1,13 +1,60 @@
-{% extends "base.html" %}
-{% block content %}
-<h1>Blog</h1>
-{% for post in posts %}
-<article class="post">
-    <h2>{{ post.title }}</h2>
-    <p class="post-date">{{ post.date }}</p>
-    <div class="post-content">{{ post.content | safe }}</div>
-</article>
-{% else %}
-<p>No blog posts found.</p>
-{% endfor %}
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>{{ title or "Shashank Space" }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- GitHub Markdown CSS (applies GitHub-like styles to .markdown-body) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.1/github-markdown.min.css" integrity="sha512-1G5xGx5VwYQF6Z5kA5+oQb3wZJ9n8j7QbKk1qj3m0mJ7zvJ2z4X8H0E0gJ9O7g7c5C6q6oC2e9Sxqg3m4i7y3w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Highlight.js (GitHub theme) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" integrity="sha512-Mf2k6mJb1k1oX9JcIYzWqgO+3tq1kFU+Qm9MZ8LVY6Cz5j0+WkTj8mV4gq2n0bLh0qA9oX2m3t3f0WlA4s7xwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha512-cg1H8m7Q8oYtV8N1fVw3P0qDqX2IocH9hQkqQ0w2d8z1pR0rQhO9mGQn2V7X8kYb6cYg0eQy4o8q3Yq1tS7WbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>hljs.highlightAll();</script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+</head>
+<body>
+  <!-- Simple Navbar -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="/">Shashank Space</a>
+      <div class="links">
+        <a href="/">Home</a>
+        <a href="{{ url_for('blog.list') }}" class="{{ 'active' if title == 'Blog' else '' }}">Blog</a>
+        <a href="/projects">Projects</a>
+        <a href="/contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="container footer">
+    <p>&copy; {{ current_year }} Shashank Space</p>
+  </footer>
+
+  <!-- Copy buttons for all code blocks -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll(".markdown-body pre > code").forEach(function(code) {
+        const pre = code.parentElement;
+        pre.style.position = "relative";
+        const btn = document.createElement("button");
+        btn.textContent = "Copy";
+        btn.className = "copy-btn";
+        btn.addEventListener("click", function() {
+          navigator.clipboard.writeText(code.innerText).then(() => {
+            btn.textContent = "Copied!";
+            setTimeout(() => btn.textContent = "Copy", 1500);
+          });
+        });
+        pre.appendChild(btn);
+      });
+    });
+  </script>
+</body>
+</html>
