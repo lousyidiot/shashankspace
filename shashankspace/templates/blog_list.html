@@ -1,14 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Blog</h1>
-<div class="post-list">
-    {% for post in posts %}
-    <div class="post-item">
-        <h2><a href="{{ url_for('blog.blog_detail', slug=post.slug) }}">{{ post.title }}</a></h2>
-        <p><small>{{ post.date }}</small></p>
-        <p>{{ post.preview }}</p>
-        <a href="{{ url_for('blog.blog_detail', slug=post.slug) }}">Read More →</a>
+  <h1 class="page-title">Blog</h1>
+
+  {% if posts %}
+    <div class="post-list">
+      {% for p in posts %}
+        <article class="post-card">
+          <h2 class="post-title">
+            <a href="{{ url_for('blog.detail', slug=p.slug) }}">{{ p.title }}</a>
+          </h2>
+          <div class="post-meta">
+            <span>{{ p.date }}</span>
+            {% if p.tags %}
+              &nbsp;•&nbsp; <span class="tags">{{ p.tags|join(', ') }}</span>
+            {% endif %}
+          </div>
+          <p class="post-excerpt">{{ p.excerpt }}</p>
+          <a class="read-more" href="{{ url_for('blog.detail', slug=p.slug) }}">Read more →</a>
+        </article>
+      {% endfor %}
     </div>
-    {% endfor %}
-</div>
+  {% else %}
+    <p>No posts yet.</p>
+  {% endif %}
 {% endblock %}
